@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<h2>Добро пожаловать, {{ request.user.username }}!</h2>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <input type="file" name="music">
+  <button type="submit">Загрузить</button>
+</form>
+
+<h3>Моя музыка</h3>
+{% for music in music_files %}
+  <div>
+    <p>{{ music.title }}</p>
+    <audio id="audio{{ forloop.counter }}" controls>
+      <source src="{{ music.file.url }}" type="audio/mp3">
+    </audio><br>
+    <button onclick="stopAudio({{ forloop.counter }})">Стоп</button>
+    <button onclick="repeatAudio({{ forloop.counter }})">Повторить</button>
+  </div>
+{% endfor %}
+
+<a href="{% url 'logout' %}">Выход</a>
+
+<script>
+function stopAudio(id) {
+  const audio = document.getElementById('audio' + id);
+  audio.pause();
+}
+
+function repeatAudio(id) {
+  const audio = document.getElementById('audio' + id);
+  audio.currentTime = 0;
+  audio.play();
+}
+</script>
+"""
+</body>
+</html>
